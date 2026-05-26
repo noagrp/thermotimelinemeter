@@ -557,14 +557,14 @@
 
         <div class="io-buttons">
             <div style="display: flex; gap: 6px;">
-                <button id="sortOldestBtn" onclick="toggleSortDirection('oldest')" class="active-sort-btn">⏳ Oldest ➔ Newest</button>
-                <button id="sortNewestBtn" onclick="toggleSortDirection('newest')">⌛ Newest ➔ Oldest</button>
+                <button id="sortOldestBtn" onclick="toggleSortDirection('oldest')" class="active-sort-btn">Oldest First</button>
+                <button id="sortNewestBtn" onclick="toggleSortDirection('newest')">Newest First</button>
             </div>
             <div style="display: flex; gap: 6px; margin-left: auto;">
-                <button onclick="exportData()">📤 Export</button>
-                <label class="btn-label" for="importFile">📥 Import</label>
+                <button onclick="exportData()">Export</button>
+                <label class="btn-label" for="importFile">Import</label>
                 <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
-                <button onclick="clearAllData()" class="danger-btn">🗑️ Clear</button>
+                <button onclick="clearAllData()" class="danger-btn">🗑️</button>
             </div>
         </div>
     </div>
