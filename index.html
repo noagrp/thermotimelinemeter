@@ -167,6 +167,8 @@
         }
 
         button, label.btn-label {
+            height: 34px;
+            line-height: 20px;
             padding: 6px 14px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
@@ -176,6 +178,10 @@
             font-weight: bold;
             font-size: 0.85rem;
             text-transform: none !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
         }
 
         /* Active Sorting Button Setup with Strict Configuration Overrides */
@@ -215,6 +221,23 @@
             margin-bottom: 4px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
+        }
+
+        /* Storage Notice Context Label Override */
+        label.storage-note {
+            text-transform: none !important;
+            font-weight: normal;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            opacity: 0.85;
+            margin-top: 4px;
+            margin-bottom: 10px;
+            border-left: 2px solid var(--accent-color);
+            padding-left: 8px;
+        }
+        [data-theme="soft-rainbow"] label.storage-note {
+            color: #000000;
+            font-weight: 600;
         }
 
         input, textarea {
@@ -508,13 +531,23 @@
                 left: 24px;
                 transform: none;
             }
+            .io-buttons {
+                justify-content: center;
+            }
+            .io-buttons > div {
+                width: 100%;
+                justify-content: center;
+            }
+            .io-buttons > div:last-child {
+                margin-left: 0 !important;
+            }
         }
     </style>
 </head>
 <body data-theme="very-black">
 
     <header>
-        <h1></h1>
+        <h1>ThermoTimelineMeter</h1>
         <div class="theme-selector">
             <button onclick="setTheme('very-black')">Very Black</button>
             <button onclick="setTheme('white')">White Theme</button>
@@ -552,9 +585,11 @@
                     <textarea id="storyDesc" rows="2" placeholder="Provide extra contextual details here..." required></textarea>
                 </div>
                 
-                <button type="submit">Record</button>
+                <button type="submit" style="width: 100%; margin-top: 4px;">Record</button>
             </div>
         </form>
+
+        <label class="storage-note">⚠️ Notice: Data is stored completely locally inside your current browser session. If you clear your browser cookies or cache storage, this tracking layout records will disappear permanently unless you use the Export action to back up your timeline file and reload it later via Import.</label>
 
         <div class="io-buttons">
             <div style="display: flex; gap: 6px;">
@@ -610,7 +645,7 @@
                 btn.innerHTML = '➕ Add Story';
             } else {
                 panel.style.display = 'block';
-                btn.innerHTML = '➖ Close';
+                btn.innerHTML = '➖ Close Entry Panel';
             }
         }
 
@@ -756,7 +791,6 @@
                 let cardInnerMarkup = '';
 
                 if (editingId === story.id) {
-                    // Render editable entry interface
                     cardInnerMarkup = `
                         <div class="timeline-content">
                             <span class="date-badge">${formatDateTime(story.datetime)} (Date Locked)</span>
@@ -781,7 +815,6 @@
                         </div>
                     `;
                 } else {
-                    // Render typical viewer profile content markup
                     let mediaMarkup = '';
                     if (story.mediaLink && story.mediaLink.trim() !== '') {
                         const ytID = parseYouTubeVideoID(story.mediaLink);
