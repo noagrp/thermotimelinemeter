@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ThermoTimelineMeter</title>
     <style>
         /* --- Themes Configurations --- */
@@ -12,7 +13,7 @@
             --accent-color: #ff4757;
             --line-color: #333333;
             --border-color: #444444;
-            --mercury-fluid: #ff4757; /* The physical thermometer red liquid color */
+            --mercury-fluid: #ff4757;
             --glass-sheen: rgba(255, 255, 255, 0.15);
         }
 
@@ -67,9 +68,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh; /* Pinned exact vertical frame window viewport */
-            overflow-x: auto; /* Standard safe horizontal panning wrapper engine */
-            overflow-y: hidden; /* Prevent parent frame window double vertical scrolling */
+            height: 100vh; /* Lock height view to viewport frame */
+            overflow: hidden; /* Prevent total outer browser window scrolling */
         }
 
         header {
@@ -85,7 +85,7 @@
             margin-bottom: 8px;
         }
 
-        /* --- Controls Dashboard Panel --- */
+        /* --- Controls Dashboard Interface Panel --- */
         .controls-panel {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -137,10 +137,12 @@
         .form-row {
             display: flex;
             gap: 12px;
+            flex-wrap: wrap;
         }
 
         .form-field {
             flex: 1;
+            min-width: 200px;
         }
 
         label {
@@ -169,6 +171,8 @@
             margin-top: 10px;
             padding-top: 10px;
             border-top: 1px dashed var(--border-color);
+            flex-wrap: wrap;
+            gap: 8px;
         }
 
         .danger-btn {
@@ -180,26 +184,26 @@
             color: white !important;
         }
 
-        /* --- Pinned Desktop Widescreen Layout Structural Enclosure Frame --- */
+        /* --- Pinned Scroll Window Frame Wrapper --- */
         .timeline-outer-wrapper {
             width: 100%;
             max-width: 850px;
-            min-width: 850px; /* Forcing absolute non-collapsing desktop spacing grid layouts even on small phones */
             flex-grow: 1;
             position: relative;
             overflow: hidden;
             display: flex;
         }
 
-        /* Standard Native Scroll Window sitting on the right perimeter boundary side */
+        /* Standard native web browser vertical track scrolling window (stays on the right edge) */
         .timeline-scroll-box {
             width: 100%;
             height: 100%;
-            overflow-y: scroll; /* Clean natural vertical scroll track box mechanics */
-            padding: 20px 0 80px 0; /* Extra bottom spacing room for physical thermometer fluid base bulb reservoir */
+            overflow-y: scroll;
+            padding: 20px 10px 80px 10px;
+            background: var(--bg-color);
         }
 
-        /* Aesthetic Right-Hand Scrollbar Custom Track Styling */
+        /* Aesthetics Scrollbar Track Modifications */
         .timeline-scroll-box::-webkit-scrollbar {
             width: 8px;
         }
@@ -211,14 +215,14 @@
             border-radius: 10px;
         }
 
-        /* --- The Real Thermometer Instrument Structural Layout Core --- */
+        /* --- The Thermometer Graphic Layout Grid Core --- */
         .timeline-container {
             position: relative;
             width: 100%;
             margin: 0 auto;
         }
 
-        /* Hollow Glass Stem Cap Cylinder Tube Layer */
+        /* Hollow Glass Stem Cap Outer Cylinder Tube Track Layer */
         .timeline-container::before {
             content: '';
             position: absolute;
@@ -227,14 +231,14 @@
             border: 2px solid var(--border-color);
             box-shadow: inset 2px 0 5px var(--glass-sheen);
             top: 0;
-            bottom: 40px; /* Leave clean proportional space for the physical base fluid bulb structure */
+            bottom: 40px; 
             left: 50%;
             transform: translateX(-50%);
             border-radius: 10px;
             z-index: 1;
         }
 
-        /* Dynamic Continuous Inner Red Fluid Core Line Column */
+        /* Continuous Dynamic Inner Red Mercury Fluid Core Column Line */
         .timeline-container::after {
             content: '';
             position: absolute;
@@ -249,7 +253,7 @@
             z-index: 2;
         }
 
-        /* Physical Base Mercury Bulb Element Reservoir Structure */
+        /* Base Fluid Bulb Reservoir Element Graphic */
         .thermometer-base-bulb {
             position: absolute;
             width: 38px;
@@ -264,7 +268,7 @@
             z-index: 3;
         }
 
-        /* --- Alternating Grid Alignment Framework Module Blocks --- */
+        /* --- Widescreen PC & TV Desktop Grid Engine Layout Rules --- */
         .timeline-item {
             display: flex;
             position: relative;
@@ -274,21 +278,19 @@
             z-index: 4;
         }
 
-        /* Left Sided Data Card Coordinates */
         .timeline-item.left {
             justify-content: flex-start;
-            padding-right: calc(50% + 25px); /* Perfectly balanced spacing around expanded center glass thermometer stem */
+            padding-right: calc(50% + 25px); 
             padding-left: 30px;
         }
 
-        /* Right Sided Data Card Coordinates */
         .timeline-item.right {
             justify-content: flex-end;
-            padding-left: calc(50% + 25px); /* Perfectly balanced spacing around expanded center glass thermometer stem */
+            padding-left: calc(50% + 25px); 
             padding-right: 30px;
         }
 
-        /* Interactive Connection Node Bulbs resting over the mercury fluid line track stem axis */
+        /* Center Pinned Mercury Core Connection Node Bulbs */
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -303,10 +305,10 @@
             transform: translateX(-50%);
         }
 
-        /* Timeline Display Content Cards */
+        /* Uniform Card Design Architecture Module */
         .timeline-content {
             width: 100%;
-            max-width: 350px; /* Precise uniform proportional size layout fields */
+            max-width: 350px; 
             padding: 14px 18px;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -363,6 +365,42 @@
             color: red;
             background: transparent;
         }
+
+        /* --- Smart Dynamic Mobile Media Query Viewport Override (1-Side Responsive Rule) --- */
+        @media screen and (max-width: 600px) {
+            /* Shift the complete physical thermometer stem line over to the left boundary rim margin */
+            .timeline-container::before {
+                left: 20px;
+                transform: none;
+            }
+            .timeline-container::after {
+                left: 24px;
+                transform: none;
+            }
+            .thermometer-base-bulb {
+                left: 24px;
+                transform: none;
+            }
+
+            /* Remap all left/right cards to sit legibly in a single responsive column down the right side */
+            .timeline-item.left, .timeline-item.right {
+                padding-left: 45px;
+                padding-right: 10px;
+                justify-content: flex-start;
+            }
+
+            .left .timeline-content, .right .timeline-content {
+                margin-left: 0;
+                margin-right: 0;
+                max-width: 100%; /* Dynamically use the available phone screen width perfectly */
+            }
+
+            /* Shift connection node points to match left-aligned tube tracking rules */
+            .timeline-item::after {
+                left: 24px;
+                transform: none;
+            }
+        }
     </style>
 </head>
 <body data-theme="very-black">
@@ -386,7 +424,7 @@
                     </div>
                     <div class="form-field" style="flex: 1.5;">
                         <label for="storyTitle">Milestone Title</label>
-                        <input type="text" id="storyTitle" placeholder="e.g., Key Milestone" required>
+                        <input type="text" id="storyTitle" placeholder="e.g., Dinner Event" required>
                     </div>
                 </div>
                 
@@ -395,7 +433,7 @@
                     <textarea id="storyDesc" rows="2" placeholder="Provide extra contextual details here..." required></textarea>
                 </div>
                 
-                <button type="submit">Record to Thermometer Tracker</button>
+                <button type="submit">Record</button>
             </div>
         </form>
 
@@ -404,9 +442,9 @@
                 <button id="sortOldestBtn" onclick="toggleSortDirection('oldest')" class="active-sort-btn">⏳ Oldest ➔ Newest</button>
                 <button id="sortNewestBtn" onclick="toggleSortDirection('newest')">⌛ Newest ➔ Oldest</button>
             </div>
-            <div style="display: flex; gap: 6px;">
-                <button onclick="exportData()">📤 Export</button>
-                <label class="btn-label" for="importFile">📥 Import</label>
+            <div style="display: flex; gap: 6px; margin-left: auto;">
+                <button onclick="exportData()">📤 Export JSON</button>
+                <label class="btn-label" for="importFile">📥 Import JSON</label>
                 <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
                 <button onclick="clearAllData()" class="danger-btn">🗑️ Reset Track</button>
             </div>
@@ -425,7 +463,7 @@
         let currentSortDirection = 'oldest'; 
 
         window.onload = function() {
-            const storedStories = localStorage.getItem('thermometer_stories_v3');
+            const storedStories = localStorage.getItem('thermometer_stories_v4');
             const storedTheme = localStorage.getItem('thermometer_theme');
             const storedSort = localStorage.getItem('thermometer_sort');
             
@@ -527,7 +565,7 @@
         }
 
         function saveAndRender() {
-            localStorage.setItem('thermometer_stories_v3', JSON.stringify(stories));
+            localStorage.setItem('thermometer_stories_v4', JSON.stringify(stories));
             sortAndRender();
         }
 
@@ -535,7 +573,7 @@
             const timeline = document.getElementById('timeline');
             timeline.innerHTML = '';
 
-            // Micro-Chronology Sort Engine Vector Array Mechanics
+            // Micro-Chronology Sorting Engine
             stories.sort((a, b) => {
                 const timeA = new Date(a.datetime).getTime();
                 const timeB = new Date(b.datetime).getTime();
@@ -559,7 +597,6 @@
                 timeline.appendChild(itemDiv);
             });
 
-            // Append a stylized structural liquid base bulb reservoir directly at the bottom terminal of the timeline track column
             if (stories.length > 0) {
                 const bulbDiv = document.createElement('div');
                 bulbDiv.className = 'thermometer-base-bulb';
