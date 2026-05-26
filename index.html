@@ -15,6 +15,7 @@
             --border-color: #444444;
             --mercury-fluid: #ff4757;
             --glass-sheen: rgba(255, 255, 255, 0.15);
+            --btn-hover-bg: #ffffff;
             --btn-hover-text: #000000;
         }
 
@@ -27,6 +28,8 @@
             --border-color: #ffffff;
             --mercury-fluid: #ffffff;
             --glass-sheen: rgba(255, 255, 255, 0.3);
+            /* Custom values adjusted to prevent bright white button washout */
+            --btn-hover-bg: #aaaaaa; 
             --btn-hover-text: #000000;
         }
 
@@ -39,6 +42,7 @@
             --border-color: #000000;
             --mercury-fluid: #000000;
             --glass-sheen: rgba(0, 0, 0, 0.1);
+            --btn-hover-bg: #000000;
             --btn-hover-text: #ffffff;
         }
 
@@ -52,6 +56,7 @@
             --vivid-text: #ff1100;
             --mercury-fluid: #ff4757;
             --glass-sheen: rgba(255, 255, 255, 0.4);
+            --btn-hover-bg: #2f3542;
             --btn-hover-text: #ffffff;
         }
 
@@ -108,13 +113,6 @@
             border-radius: 20px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        
-        /* Text protection shadow outline for Very Black theme button hovers */
-        [data-theme="very-black"] button:hover, 
-        [data-theme="very-black"] label.btn-label:hover {
-            text-shadow: -1px -1px 0 #444, 1px -1px 0 #444, -1px 1px 0 #444, 1px 1px 0 #444;
-            -webkit-text-stroke: 0.5px #333333;
-        }
 
         .controls-panel {
             background: var(--card-bg);
@@ -150,22 +148,25 @@
         }
 
         button:hover, label.btn-label:hover {
-            background: var(--text-color);
+            background: var(--btn-hover-bg);
             color: var(--btn-hover-text);
         }
 
-        /* Active Sorting Button Modifiers with Legibility Contrast Handlers */
+        /* Active Sorting Button Setup with Strict Contrast Rule Chains */
         .active-sort-btn {
             background: var(--accent-color) !important;
-            color: #ffffff !important;
+            color: #000000 !important; /* Forces solid black text base for highest legibility */
             border-color: var(--accent-color) !important;
         }
-        .active-sort-btn:hover {
-            background: #ffffff !important;
+        [data-theme="very-black"] .active-sort-btn {
             color: #000000 !important;
+            background: #ffffff !important;
             border-color: #ffffff !important;
-            -webkit-text-stroke: 0px transparent !important;
-            text-shadow: none !important;
+        }
+        .active-sort-btn:hover {
+            background: var(--btn-hover-bg) !important;
+            color: var(--btn-hover-text) !important;
+            border-color: var(--btn-hover-bg) !important;
         }
 
         .input-group {
@@ -204,7 +205,6 @@
             font-size: 0.9rem;
         }
 
-        /* Native calendar picker target color tuning */
         input[type="datetime-local"]::-webkit-calendar-picker-indicator {
             filter: invert(1);
         }
@@ -230,8 +230,6 @@
         .danger-btn:hover {
             background: #ff4757 !important;
             color: white !important;
-            -webkit-text-stroke: 0px transparent !important;
-            text-shadow: none !important;
         }
 
         /* --- Pinned Scroll Window Frame Wrapper --- */
@@ -507,7 +505,7 @@
                 
                 <div class="form-row">
                     <div class="form-field">
-                        <label for="storyMediaLink">Optional Resource / YouTube Link</label>
+                        <label for="storyMediaLink">Link</label>
                         <input type="url" id="storyMediaLink" placeholder="https://www.youtube.com/watch?v=...">
                     </div>
                 </div>
@@ -517,7 +515,7 @@
                     <textarea id="storyDesc" rows="2" placeholder="Provide extra contextual details here..." required></textarea>
                 </div>
                 
-                <button type="submit">Record to Thermometer Tracker</button>
+                <button type="submit">Record</button>
             </div>
         </form>
 
