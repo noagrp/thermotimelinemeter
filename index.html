@@ -12,7 +12,8 @@
             --accent-color: #ff4757;
             --line-color: #333333;
             --border-color: #444444;
-            --mercury-fluid: #ff4757; /* Dynamic Thermometer Red Fluid Line */
+            --mercury-fluid: #ff4757; /* The physical thermometer red liquid color */
+            --glass-sheen: rgba(255, 255, 255, 0.15);
         }
 
         [data-theme="very-black"] {
@@ -23,6 +24,7 @@
             --line-color: #222222;
             --border-color: #ffffff;
             --mercury-fluid: #ffffff;
+            --glass-sheen: rgba(255, 255, 255, 0.3);
         }
 
         [data-theme="white"] {
@@ -33,6 +35,7 @@
             --line-color: #dddddd;
             --border-color: #000000;
             --mercury-fluid: #000000;
+            --glass-sheen: rgba(0, 0, 0, 0.1);
         }
 
         [data-theme="soft-rainbow"] {
@@ -44,6 +47,7 @@
             --border-color: #ced6e0;
             --vivid-text: #ff1100;
             --mercury-fluid: #ff4757;
+            --glass-sheen: rgba(255, 255, 255, 0.4);
         }
 
         /* --- Global Structural Framework --- */
@@ -63,9 +67,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh; /* Lock vertical viewport frame */
-            overflow-x: auto; /* Allow horizontal panning on tiny screens if zoomed */
-            overflow-y: hidden; /* Suppress outer root window scrollbars */
+            height: 100vh; /* Pinned exact vertical frame window viewport */
+            overflow-x: auto; /* Standard safe horizontal panning wrapper engine */
+            overflow-y: hidden; /* Prevent parent frame window double vertical scrolling */
         }
 
         header {
@@ -176,108 +180,147 @@
             color: white !important;
         }
 
-        /* --- Pinned Central Thermometer Scroll Track Layout Engine --- */
+        /* --- Pinned Desktop Widescreen Layout Structural Enclosure Frame --- */
         .timeline-outer-wrapper {
             width: 100%;
             max-width: 850px;
-            min-width: 800px; /* Force locked desktop aspect width layouts even on tiny mobile phones */
+            min-width: 850px; /* Forcing absolute non-collapsing desktop spacing grid layouts even on small phones */
             flex-grow: 1;
             position: relative;
             overflow: hidden;
             display: flex;
         }
 
+        /* Standard Native Scroll Window sitting on the right perimeter boundary side */
         .timeline-scroll-box {
             width: 100%;
             height: 100%;
-            overflow-y: scroll; /* Forces inner track window scrolling actions */
-            padding: 20px 0 60px 0;
+            overflow-y: scroll; /* Clean natural vertical scroll track box mechanics */
+            padding: 20px 0 80px 0; /* Extra bottom spacing room for physical thermometer fluid base bulb reservoir */
         }
 
-        /* --- The Master Center Scrollbar Transformation (The Fluid Mercury Tube) --- */
-        /* We pull the container scrollbar directly into the absolute 50% dead-center coordinate axis */
+        /* Aesthetic Right-Hand Scrollbar Custom Track Styling */
         .timeline-scroll-box::-webkit-scrollbar {
-            width: 10px; /* Thickness of our glass thermometer tube fluid core */
+            width: 8px;
         }
-        
         .timeline-scroll-box::-webkit-scrollbar-track {
-            background: var(--line-color); /* The outer un-filled glass tube background channel */
-            border-radius: 20px;
+            background: transparent;
         }
-        
         .timeline-scroll-box::-webkit-scrollbar-thumb {
-            background: var(--mercury-fluid); /* Red mercury dynamic moving fluid core component */
-            border-radius: 20px;
-            border: 1px solid var(--bg-color);
-            box-shadow: 0 0 10px var(--mercury-fluid); /* Glowing semi-glass neon fluid finish */
+            background-color: var(--border-color);
+            border-radius: 10px;
         }
 
-        /* Shift the timeline coordinate engine grid to account for the center scroll track spacer core */
+        /* --- The Real Thermometer Instrument Structural Layout Core --- */
         .timeline-container {
             position: relative;
             width: 100%;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
-        /* --- Alternating Grid Alignment Module Block --- */
+        /* Hollow Glass Stem Cap Cylinder Tube Layer */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            width: 14px;
+            background: var(--line-color);
+            border: 2px solid var(--border-color);
+            box-shadow: inset 2px 0 5px var(--glass-sheen);
+            top: 0;
+            bottom: 40px; /* Leave clean proportional space for the physical base fluid bulb structure */
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            z-index: 1;
+        }
+
+        /* Dynamic Continuous Inner Red Fluid Core Line Column */
+        .timeline-container::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: var(--mercury-fluid);
+            box-shadow: 0 0 8px var(--mercury-fluid);
+            top: 4px;
+            bottom: 45px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        /* Physical Base Mercury Bulb Element Reservoir Structure */
+        .thermometer-base-bulb {
+            position: absolute;
+            width: 38px;
+            height: 38px;
+            background: var(--mercury-fluid);
+            border: 3px solid var(--border-color);
+            box-shadow: 0 0 12px var(--mercury-fluid);
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 50%;
+            z-index: 3;
+        }
+
+        /* --- Alternating Grid Alignment Framework Module Blocks --- */
         .timeline-item {
             display: flex;
             position: relative;
             width: 100%;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             box-sizing: border-box;
+            z-index: 4;
         }
 
-        /* Standard Left Sided Data Card Configurations */
+        /* Left Sided Data Card Coordinates */
         .timeline-item.left {
             justify-content: flex-start;
-            padding-right: calc(50% + 15px); /* Align perfectly relative to center scroll line */
-            padding-left: 20px;
+            padding-right: calc(50% + 25px); /* Perfectly balanced spacing around expanded center glass thermometer stem */
+            padding-left: 30px;
         }
 
-        /* Standard Right Sided Data Card Configurations */
+        /* Right Sided Data Card Coordinates */
         .timeline-item.right {
             justify-content: flex-end;
-            padding-left: calc(50% + 15px); /* Align perfectly relative to center scroll line */
-            padding-right: 20px;
+            padding-left: calc(50% + 25px); /* Perfectly balanced spacing around expanded center glass thermometer stem */
+            padding-right: 30px;
         }
 
-        /* Pinned Central Node Bulbs resting over the mercury channel track */
+        /* Interactive Connection Node Bulbs resting over the mercury fluid line track stem axis */
         .timeline-item::after {
             content: '';
             position: absolute;
-            width: 16px;
-            height: 16px;
+            width: 14px;
+            height: 14px;
             background-color: var(--card-bg);
             border: 3.5px solid var(--accent-color);
             border-radius: 50%;
             z-index: 5;
-            top: 20px;
+            top: 18px;
             left: 50%;
-            transform: translateX(-50%); /* Locks nodes exactly over center scroll spacer line axis */
+            transform: translateX(-50%);
         }
 
         /* Timeline Display Content Cards */
         .timeline-content {
             width: 100%;
-            max-width: 360px; /* Fixed maximum proportional size parameters */
+            max-width: 350px; /* Precise uniform proportional size layout fields */
             padding: 14px 18px;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12);
             text-align: left;
         }
 
         .left .timeline-content {
-            margin-left: auto; /* Pin against the center divider channel */
+            margin-left: auto;
         }
 
         .right .timeline-content {
-            margin-right: auto; /* Pin against the center divider channel */
+            margin-right: auto;
         }
 
         [data-theme="soft-rainbow"] .timeline-content h3 {
@@ -492,7 +535,7 @@
             const timeline = document.getElementById('timeline');
             timeline.innerHTML = '';
 
-            // Micro-Chronology Sorting Engine
+            // Micro-Chronology Sort Engine Vector Array Mechanics
             stories.sort((a, b) => {
                 const timeA = new Date(a.datetime).getTime();
                 const timeB = new Date(b.datetime).getTime();
@@ -515,6 +558,13 @@
                 `;
                 timeline.appendChild(itemDiv);
             });
+
+            // Append a stylized structural liquid base bulb reservoir directly at the bottom terminal of the timeline track column
+            if (stories.length > 0) {
+                const bulbDiv = document.createElement('div');
+                bulbDiv.className = 'thermometer-base-bulb';
+                timeline.appendChild(bulbDiv);
+            }
         }
 
         function escapeHtml(text) {
