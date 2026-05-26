@@ -21,6 +21,7 @@
             --btn-text: #ffffff;
             --trigger-btn-bg: #ff4757;
             --trigger-btn-text: #ffffff;
+            --bg-animation: none;
         }
 
         [data-theme="very-black"] {
@@ -38,6 +39,7 @@
             --btn-text: #ffffff;
             --trigger-btn-bg: #000000;
             --trigger-btn-text: #ffffff;
+            --bg-animation: none;
         }
 
         [data-theme="white"] {
@@ -55,6 +57,7 @@
             --btn-text: #000000;
             --trigger-btn-bg: #ffffff;
             --trigger-btn-text: #000000;
+            --bg-animation: none;
         }
 
         [data-theme="soft-rainbow"] {
@@ -68,11 +71,22 @@
             --mercury-fluid: #ff4757;
             --glass-sheen: rgba(255, 255, 255, 0.4);
             
-            /* Rainbow theme: Rainbow Button (Following Form Background Wrapper) Black words */
+            /* Rainbow theme: Rainbow Button Black words */
             --btn-bg: rgba(255, 255, 255, 0.9);
             --btn-text: #000000;
             --trigger-btn-bg: rgba(255, 255, 255, 0.9);
             --trigger-btn-text: #000000;
+            --bg-animation: chameleonLoop 16s ease infinite;
+        }
+
+        /* --- Chameleon Background Loop Keyframe Set --- */
+        @keyframes chameleonLoop {
+            0% { background: #ffe5ec; }
+            20% { background: #ffebf0; }
+            40% { background: #f0e6ff; }
+            60% { background: #e8f0fe; }
+            80% { background: #e6fffa; }
+            100% { background: #ffe5ec; }
         }
 
         /* --- Global Structural Framework --- */
@@ -86,6 +100,7 @@
 
         body {
             background: var(--bg-color);
+            animation: var(--bg-animation);
             background-attachment: fixed;
             color: var(--text-color);
             padding: 15px;
@@ -436,7 +451,29 @@
             text-decoration: underline;
             font-weight: normal;
             padding: 0;
-            display: block;
+            display: inline-block;
+            margin-right: 12px;
+        }
+
+        .edit-btn {
+            background: transparent !important;
+            border: none !important;
+            color: var(--accent-color) !important;
+            cursor: pointer;
+            font-size: 0.75rem;
+            margin-top: 12px;
+            text-decoration: underline;
+            font-weight: normal;
+            padding: 0;
+            display: inline-block;
+        }
+
+        .inline-edit-field {
+            margin-bottom: 8px;
+        }
+        .inline-edit-field label {
+            font-size: 0.7rem;
+            margin-bottom: 2px;
         }
 
         /* --- Smart Dynamic Mobile Media Query Viewport Override --- */
@@ -485,7 +522,7 @@
     </header>
 
     <div class="toggle-form-trigger-wrapper">
-        <button onclick="toggleInputPanel()" id="toggleFormBtn" class="toggle-panel-btn">➕ Add Memory Milestone</button>
+        <button onclick="toggleInputPanel()" id="toggleFormBtn" class="toggle-panel-btn">➕ Add Story</button>
     </div>
 
     <div class="controls-panel" id="entryPanel">
@@ -497,7 +534,7 @@
                         <input type="datetime-local" id="storyDateTime" required>
                     </div>
                     <div class="form-field" style="flex: 1.5;">
-                        <label for="storyTitle">Milestone Title</label>
+                        <label for="storyTitle">Title</label>
                         <input type="text" id="storyTitle" placeholder="e.g., Anniversary Dinner" required>
                     </div>
                 </div>
@@ -510,7 +547,7 @@
                 </div>
                 
                 <div>
-                    <label for="storyDesc">Log Specific Details</label>
+                    <label for="storyDesc">Story</label>
                     <textarea id="storyDesc" rows="2" placeholder="Provide extra contextual details here..." required></textarea>
                 </div>
                 
@@ -524,10 +561,10 @@
                 <button id="sortNewestBtn" onclick="toggleSortDirection('newest')">⌛ Newest ➔ Oldest</button>
             </div>
             <div style="display: flex; gap: 6px; margin-left: auto;">
-                <button onclick="exportData()">📤 Export JSON</button>
-                <label class="btn-label" for="importFile">📥 Import JSON</label>
+                <button onclick="exportData()">📤 Export</button>
+                <label class="btn-label" for="importFile">📥 Import</label>
                 <input type="file" id="importFile" accept=".json" onchange="importData(event)" style="display: none;">
-                <button onclick="clearAllData()" class="danger-btn">🗑️ Reset Track</button>
+                <button onclick="clearAllData()" class="danger-btn">🗑️ Clear</button>
             </div>
         </div>
     </div>
@@ -542,6 +579,7 @@
     <script>
         let stories = [];
         let currentSortDirection = 'oldest'; 
+        let editingId = null;
 
         window.onload = function() {
             const storedStories = localStorage.getItem('thermometer_stories_v5');
@@ -638,6 +676,32 @@
         function deleteStory(id) {
             if(confirm("Confirm removal of this log event?")) {
                 stories = stories.filter(story => story.id !== id);
+                if (editingId === id) editingId = null;
+                saveAndRender();
+            }
+        }
+
+        function toggleInlineEdit(id) {
+            if (editingId === id) {
+                editingId = null;
+            } else {
+                editingId = id;
+            }
+            sortAndRender();
+        }
+
+        function saveInlineEdit(id) {
+            const targetStory = stories.find(s => s.id === id);
+            if (targetStory) {
+                const updatedTitle = document.getElementById(`editTitle-${id}`).value;
+                const updatedLink = document.getElementById(`editLink-${id}`).value;
+                const updatedDesc = document.getElementById(`editDesc-${id}`).value;
+
+                targetStory.title = updatedTitle;
+                targetStory.mediaLink = updatedLink;
+                targetStory.desc = updatedDesc;
+
+                editingId = null;
                 saveAndRender();
             }
         }
@@ -645,6 +709,7 @@
         function clearAllData() {
             if(confirm("Are you sure you want to completely wipe all recorded timelines?")) {
                 stories = [];
+                editingId = null;
                 saveAndRender();
             }
         }
@@ -687,31 +752,64 @@
                 const sideClass = (index % 2 === 0) ? 'left' : 'right';
                 itemDiv.className = `timeline-item ${sideClass}`;
 
-                let mediaMarkup = '';
-                if (story.mediaLink && story.mediaLink.trim() !== '') {
-                    const ytID = parseYouTubeVideoID(story.mediaLink);
-                    if (ytID) {
-                        mediaMarkup = `
-                            <div class="media-player-container">
-                                <iframe src="https://www.youtube.com/embed/${ytID}" allowfullscreen></iframe>
+                let cardInnerMarkup = '';
+
+                if (editingId === story.id) {
+                    // Render editable entry interface
+                    cardInnerMarkup = `
+                        <div class="timeline-content">
+                            <span class="date-badge">${formatDateTime(story.datetime)} (Date Locked)</span>
+                            
+                            <div class="inline-edit-field">
+                                <label>Milestone Title</label>
+                                <input type="text" id="editTitle-${story.id}" value="${escapeHtml(story.title)}" required>
                             </div>
-                        `;
-                    } else {
-                        mediaMarkup = `
-                            <a href="${escapeHtml(story.mediaLink)}" target="_blank" class="common-resource-link">🔗 Open Shared Link</a>
-                        `;
+                            
+                            <div class="inline-edit-field">
+                                <label>Link</label>
+                                <input type="url" id="editLink-${story.id}" value="${escapeHtml(story.mediaLink || '')}">
+                            </div>
+                            
+                            <div class="inline-edit-field">
+                                <label>Log Details</label>
+                                <textarea id="editDesc-${story.id}" rows="2" required>${escapeHtml(story.desc)}</textarea>
+                            </div>
+                            
+                            <button class="delete-btn" onclick="deleteStory(${story.id})">Remove Memory</button>
+                            <button class="edit-btn" onclick="saveInlineEdit(${story.id})">Save Changes</button>
+                        </div>
+                    `;
+                } else {
+                    // Render typical viewer profile content markup
+                    let mediaMarkup = '';
+                    if (story.mediaLink && story.mediaLink.trim() !== '') {
+                        const ytID = parseYouTubeVideoID(story.mediaLink);
+                        if (ytID) {
+                            mediaMarkup = `
+                                <div class="media-player-container">
+                                    <iframe src="https://www.youtube.com/embed/${ytID}" allowfullscreen></iframe>
+                                </div>
+                            `;
+                        } else {
+                            mediaMarkup = `
+                                <a href="${escapeHtml(story.mediaLink)}" target="_blank" class="common-resource-link">🔗 Open Shared Link</a>
+                            `;
+                        }
                     }
+
+                    cardInnerMarkup = `
+                        <div class="timeline-content">
+                            <span class="date-badge">${formatDateTime(story.datetime)}</span>
+                            <h3>${escapeHtml(story.title)}</h3>
+                            <p class="story-text">${escapeHtml(story.desc)}</p>
+                            ${mediaMarkup}
+                            <button class="delete-btn" onclick="deleteStory(${story.id})">Remove Memory</button>
+                            <button class="edit-btn" onclick="toggleInlineEdit(${story.id})">Edit</button>
+                        </div>
+                    `;
                 }
 
-                itemDiv.innerHTML = `
-                    <div class="timeline-content">
-                        <span class="date-badge">${formatDateTime(story.datetime)}</span>
-                        <h3>${escapeHtml(story.title)}</h3>
-                        <p class="story-text">${escapeHtml(story.desc)}</p>
-                        ${mediaMarkup}
-                        <button class="delete-btn" onclick="deleteStory(${story.id})">Remove Memory</button>
-                    </div>
-                `;
+                itemDiv.innerHTML = cardInnerMarkup;
                 timeline.appendChild(itemDiv);
             });
 
@@ -752,6 +850,7 @@
                     const importedStories = JSON.parse(e.target.result);
                     if (Array.isArray(importedStories)) {
                         stories = importedStories;
+                        editingId = null;
                         saveAndRender();
                         alert("Timeline data records successfully loaded and matched!");
                     } else {
