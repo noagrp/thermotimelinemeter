@@ -64,12 +64,12 @@
             background: var(--bg-color);
             background-attachment: fixed;
             color: var(--text-color);
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            height: 100vh; /* Lock height view to viewport frame */
-            overflow: hidden; /* Prevent total outer browser window scrolling */
+            height: 100vh; 
+            overflow: hidden; 
         }
 
         header {
@@ -81,11 +81,35 @@
         }
 
         h1 {
-            font-size: 1.2rem;
+            font-size: 2.2rem;
             margin-bottom: 8px;
         }
 
-        /* --- Controls Dashboard Interface Panel --- */
+        /* --- Collapsible Utility Panels --- */
+        .toggle-form-trigger-wrapper {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+        }
+
+        .toggle-panel-btn {
+            background: var(--accent-color);
+            color: #ffffff;
+            border-color: var(--accent-color);
+            font-size: 0.95rem;
+            padding: 8px 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .toggle-panel-btn:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+            border-color: var(--text-color);
+        }
+
         .controls-panel {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -93,10 +117,11 @@
             border-radius: 12px;
             width: 100%;
             max-width: 800px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.15);
             flex-shrink: 0;
             z-index: 10;
+            display: none; /* Hidden by default to prioritize full screen thermometer space */
         }
 
         .theme-selector {
@@ -104,6 +129,7 @@
             justify-content: center;
             gap: 10px;
             margin-bottom: 12px;
+            flex-wrap: wrap; /* Keeps header options fitting neatly on small mobile windows */
         }
 
         button, label.btn-label {
@@ -122,10 +148,16 @@
             color: var(--bg-color);
         }
 
+        /* Contrast visibility color preservation fix for Very Black active states */
         .active-sort-btn {
             background: var(--accent-color) !important;
             color: #ffffff !important;
             border-color: var(--accent-color) !important;
+        }
+        .active-sort-btn:hover {
+            background: #ffffff !important;
+            color: #000000 !important;
+            border-color: #ffffff !important;
         }
 
         .input-group {
@@ -194,16 +226,14 @@
             display: flex;
         }
 
-        /* Standard native web browser vertical track scrolling window (stays on the right edge) */
         .timeline-scroll-box {
             width: 100%;
             height: 100%;
             overflow-y: scroll;
             padding: 20px 10px 80px 10px;
-            background: var(--bg-color);
+            background: transparent;
         }
 
-        /* Aesthetics Scrollbar Track Modifications */
         .timeline-scroll-box::-webkit-scrollbar {
             width: 8px;
         }
@@ -290,7 +320,6 @@
             padding-right: 30px;
         }
 
-        /* Center Pinned Mercury Core Connection Node Bulbs */
         .timeline-item::after {
             content: '';
             position: absolute;
@@ -305,7 +334,6 @@
             transform: translateX(-50%);
         }
 
-        /* Uniform Card Design Architecture Module */
         .timeline-content {
             width: 100%;
             max-width: 350px; 
@@ -350,16 +378,49 @@
             opacity: 0.9;
         }
 
+        /* --- Embedded Rich Video Player Layout Blocks --- */
+        .media-player-container {
+            margin-top: 10px;
+            width: 100%;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: #000000;
+            aspect-ratio: 16 / 9;
+        }
+
+        .media-player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+
+        .common-resource-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .common-resource-link:hover {
+            text-decoration: underline;
+        }
+
         .delete-btn {
             background: transparent;
             border: none;
             color: #ff4757;
             cursor: pointer;
             font-size: 0.75rem;
-            margin-top: 8px;
+            margin-top: 12px;
             text-decoration: underline;
             font-weight: normal;
             padding: 0;
+            display: block;
         }
         .delete-btn:hover {
             color: red;
@@ -368,7 +429,9 @@
 
         /* --- Smart Dynamic Mobile Media Query Viewport Override (1-Side Responsive Rule) --- */
         @media screen and (max-width: 600px) {
-            /* Shift the complete physical thermometer stem line over to the left boundary rim margin */
+            h1 {
+                font-size: 1.6rem;
+            }
             .timeline-container::before {
                 left: 20px;
                 transform: none;
@@ -381,21 +444,16 @@
                 left: 24px;
                 transform: none;
             }
-
-            /* Remap all left/right cards to sit legibly in a single responsive column down the right side */
             .timeline-item.left, .timeline-item.right {
                 padding-left: 45px;
                 padding-right: 10px;
                 justify-content: flex-start;
             }
-
             .left .timeline-content, .right .timeline-content {
                 margin-left: 0;
                 margin-right: 0;
-                max-width: 100%; /* Dynamically use the available phone screen width perfectly */
+                max-width: 100%; 
             }
-
-            /* Shift connection node points to match left-aligned tube tracking rules */
             .timeline-item::after {
                 left: 24px;
                 transform: none;
@@ -414,7 +472,11 @@
         </div>
     </header>
 
-    <div class="controls-panel">
+    <div class="toggle-form-trigger-wrapper">
+        <button onclick="toggleInputPanel()" id="toggleFormBtn" class="toggle-panel-btn">➕ Add Memory Milestone</button>
+    </div>
+
+    <div class="controls-panel" id="entryPanel">
         <form id="storyForm" onsubmit="addStory(event)">
             <div class="input-group">
                 <div class="form-row">
@@ -424,7 +486,14 @@
                     </div>
                     <div class="form-field" style="flex: 1.5;">
                         <label for="storyTitle">Milestone Title</label>
-                        <input type="text" id="storyTitle" placeholder="e.g., Dinner Event" required>
+                        <input type="text" id="storyTitle" placeholder="e.g., Anniversary Dinner" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-field">
+                        <label for="storyMediaLink">Optional Resource / YouTube Link</label>
+                        <input type="url" id="storyMediaLink" placeholder="https://www.youtube.com/watch?v=...">
                     </div>
                 </div>
                 
@@ -463,7 +532,7 @@
         let currentSortDirection = 'oldest'; 
 
         window.onload = function() {
-            const storedStories = localStorage.getItem('thermometer_stories_v4');
+            const storedStories = localStorage.getItem('thermometer_stories_v5');
             const storedTheme = localStorage.getItem('thermometer_theme');
             const storedSort = localStorage.getItem('thermometer_sort');
             
@@ -479,6 +548,19 @@
 
             if (storedTheme) {
                 setTheme(storedTheme);
+            }
+        }
+
+        // Toggle Expandable Panel Interface Form Display 
+        function toggleInputPanel() {
+            const panel = document.getElementById('entryPanel');
+            const btn = document.getElementById('toggleFormBtn');
+            if (panel.style.display === 'block') {
+                panel.style.display = 'none';
+                btn.innerHTML = '➕ Add Memory Milestone';
+            } else {
+                panel.style.display = 'block';
+                btn.innerHTML = '➖ Close Entry Panel';
             }
         }
 
@@ -504,21 +586,34 @@
             return `${day}/${month}/${year} @ ${hours}:${minutes} ${ampm}`;
         }
 
+        // Helper string utility parser designed to extract unique video ID variables out from targeted YouTube URLs
+        function parseYouTubeVideoID(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|shorts\/)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
         function addStory(event) {
             event.preventDefault();
             
             const datetimeValue = document.getElementById('storyDateTime').value;
             const title = document.getElementById('storyTitle').value;
             const desc = document.getElementById('storyDesc').value;
+            const mediaLink = document.getElementById('storyMediaLink').value;
 
             stories.push({ 
                 id: Date.now(), 
                 datetime: datetimeValue, 
                 title: title, 
-                desc: desc 
+                desc: desc,
+                mediaLink: mediaLink
             });
             
             document.getElementById('storyForm').reset();
+            
+            // Auto collapse form panel entry frame post-recording execution sequence
+            toggleInputPanel();
             saveAndRender();
         }
 
@@ -565,7 +660,7 @@
         }
 
         function saveAndRender() {
-            localStorage.setItem('thermometer_stories_v4', JSON.stringify(stories));
+            localStorage.setItem('thermometer_stories_v5', JSON.stringify(stories));
             sortAndRender();
         }
 
@@ -573,7 +668,7 @@
             const timeline = document.getElementById('timeline');
             timeline.innerHTML = '';
 
-            // Micro-Chronology Sorting Engine
+            // Micro-Chronology Sorting Engine logic
             stories.sort((a, b) => {
                 const timeA = new Date(a.datetime).getTime();
                 const timeB = new Date(b.datetime).getTime();
@@ -586,12 +681,32 @@
                 const sideClass = (index % 2 === 0) ? 'left' : 'right';
                 itemDiv.className = `timeline-item ${sideClass}`;
 
+                // Process Media Elements
+                let mediaMarkup = '';
+                if (story.mediaLink && story.mediaLink.trim() !== '') {
+                    const ytID = parseYouTubeVideoID(story.mediaLink);
+                    if (ytID) {
+                        // Inject specialized embed iframe container if signature reads match
+                        mediaMarkup = `
+                            <div class="media-player-container">
+                                <iframe src="https://www.youtube.com/embed/${ytID}" allowfullscreen></iframe>
+                            </div>
+                        `;
+                    } else {
+                        // Standard link fallback handler configuration execution loop block
+                        mediaMarkup = `
+                            <a href="${escapeHtml(story.mediaLink)}" target="_blank" class="common-resource-link">🔗 Open Shared Link</a>
+                        `;
+                    }
+                }
+
                 itemDiv.innerHTML = `
                     <div class="timeline-content">
                         <span class="date-badge">${formatDateTime(story.datetime)}</span>
                         <h3>${escapeHtml(story.title)}</h3>
                         <p class="story-text">${escapeHtml(story.desc)}</p>
-                        <button class="delete-btn" onclick="deleteStory(${story.id})">Remove</button>
+                        ${mediaMarkup}
+                        <button class="delete-btn" onclick="deleteStory(${story.id})">Remove Memory</button>
                     </div>
                 `;
                 timeline.appendChild(itemDiv);
