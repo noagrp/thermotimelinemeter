@@ -15,8 +15,12 @@
             --border-color: #444444;
             --mercury-fluid: #ff4757;
             --glass-sheen: rgba(255, 255, 255, 0.15);
-            --btn-hover-bg: #ffffff;
-            --btn-hover-text: #000000;
+            
+            /* Buttons standard static theme coloring */
+            --btn-bg: #000000;
+            --btn-text: #ffffff;
+            --trigger-btn-bg: #ff4757;
+            --trigger-btn-text: #ffffff;
         }
 
         [data-theme="very-black"] {
@@ -28,9 +32,12 @@
             --border-color: #ffffff;
             --mercury-fluid: #ffffff;
             --glass-sheen: rgba(255, 255, 255, 0.3);
-            /* Custom values adjusted to prevent bright white button washout */
-            --btn-hover-bg: #aaaaaa; 
-            --btn-hover-text: #000000;
+            
+            /* Black theme: Black Button White words */
+            --btn-bg: #000000;
+            --btn-text: #ffffff;
+            --trigger-btn-bg: #000000;
+            --trigger-btn-text: #ffffff;
         }
 
         [data-theme="white"] {
@@ -42,8 +49,12 @@
             --border-color: #000000;
             --mercury-fluid: #000000;
             --glass-sheen: rgba(0, 0, 0, 0.1);
-            --btn-hover-bg: #000000;
-            --btn-hover-text: #ffffff;
+            
+            /* White theme: White Button Black words */
+            --btn-bg: #ffffff;
+            --btn-text: #000000;
+            --trigger-btn-bg: #ffffff;
+            --trigger-btn-text: #000000;
         }
 
         [data-theme="soft-rainbow"] {
@@ -56,8 +67,12 @@
             --vivid-text: #ff1100;
             --mercury-fluid: #ff4757;
             --glass-sheen: rgba(255, 255, 255, 0.4);
-            --btn-hover-bg: #2f3542;
-            --btn-hover-text: #ffffff;
+            
+            /* Rainbow theme: Rainbow Button (Following Form Background Wrapper) Black words */
+            --btn-bg: rgba(255, 255, 255, 0.9);
+            --btn-text: #000000;
+            --trigger-btn-bg: rgba(255, 255, 255, 0.9);
+            --trigger-btn-text: #000000;
         }
 
         /* --- Global Structural Framework --- */
@@ -105,9 +120,9 @@
         }
 
         .toggle-panel-btn {
-            background: var(--accent-color);
-            color: #ffffff;
-            border-color: var(--accent-color);
+            background: var(--trigger-btn-bg) !important;
+            color: var(--trigger-btn-text) !important;
+            border: 1px solid var(--border-color) !important;
             font-size: 0.95rem;
             padding: 8px 20px;
             border-radius: 20px;
@@ -140,33 +155,24 @@
             padding: 6px 14px;
             border-radius: 6px;
             border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
+            background: var(--btn-bg);
+            color: var(--btn-text);
             cursor: pointer;
             font-weight: bold;
             font-size: 0.85rem;
         }
 
-        button:hover, label.btn-label:hover {
-            background: var(--btn-hover-bg);
-            color: var(--btn-hover-text);
-        }
-
-        /* Active Sorting Button Setup with Strict Contrast Rule Chains */
+        /* Active Sorting Button Setup with Strict Configuration Overrides */
         .active-sort-btn {
-            background: var(--accent-color) !important;
-            color: #000000 !important; /* Forces solid black text base for highest legibility */
-            border-color: var(--accent-color) !important;
+            background: var(--btn-bg) !important;
+            color: var(--btn-text) !important;
+            border-color: var(--border-color) !important;
+            text-decoration: underline !important;
         }
         [data-theme="very-black"] .active-sort-btn {
-            color: #000000 !important;
-            background: #ffffff !important;
+            color: #ffffff !important;
+            background: #000000 !important;
             border-color: #ffffff !important;
-        }
-        .active-sort-btn:hover {
-            background: var(--btn-hover-bg) !important;
-            color: var(--btn-hover-text) !important;
-            border-color: var(--btn-hover-bg) !important;
         }
 
         .input-group {
@@ -224,12 +230,9 @@
         }
 
         .danger-btn {
-            color: #ff4757;
+            background: var(--btn-bg) !important;
+            color: #ff4757 !important;
             border-color: rgba(255, 71, 87, 0.3);
-        }
-        .danger-btn:hover {
-            background: #ff4757 !important;
-            color: white !important;
         }
 
         /* --- Pinned Scroll Window Frame Wrapper --- */
@@ -424,9 +427,9 @@
         }
 
         .delete-btn {
-            background: transparent;
-            border: none;
-            color: #ff4757;
+            background: transparent !important;
+            border: none !important;
+            color: #ff4757 !important;
             cursor: pointer;
             font-size: 0.75rem;
             margin-top: 12px;
@@ -434,10 +437,6 @@
             font-weight: normal;
             padding: 0;
             display: block;
-        }
-        .delete-btn:hover {
-            color: red;
-            background: transparent;
         }
 
         /* --- Smart Dynamic Mobile Media Query Viewport Override --- */
