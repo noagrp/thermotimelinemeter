@@ -606,9 +606,8 @@
     </div>
 
     <div class="timeline-outer-wrapper">
-        <div class="timeline-scroll-box">
-            <div class="timeline-container" id="timeline">
-                </div>
+        <div class="timeline-scroll-box" id="scrollBox" onscroll="handleTimelineScroll()">
+            <div class="timeline-container" id="timeline"></div>
         </div>
     </div>
 
@@ -616,6 +615,10 @@
         let stories = [];
         let currentSortDirection = 'oldest'; 
         let editingId = null;
+
+        // NEW: Lazy Load Allocation Parameters
+        let itemsRenderedCount = 0;
+        const CHUNK_SIZE = 15; // Renders 15 milestones at a time
 
         window.onload = function() {
             const storedStories = localStorage.getItem('thermometer_stories_v5');
@@ -773,19 +776,36 @@
             sortAndRender();
         }
 
+        // RE-ENGINEERED: Pre-sorts data elements and boots the initial chunk threshold tracking indices
         function sortAndRender() {
-            const timeline = document.getElementById('timeline');
-            timeline.innerHTML = '';
-
             stories.sort((a, b) => {
                 const timeA = new Date(a.datetime).getTime();
                 const timeB = new Date(b.datetime).getTime();
                 return currentSortDirection === 'oldest' ? timeA - timeB : timeB - timeA;
             });
 
-            stories.forEach((story, index) => {
+            // Reset rendering chunk counters
+            document.getElementById('timeline').innerHTML = '';
+            itemsRenderedCount = 0;
+            
+            // Render first initial batch slice
+            renderNextBatchChunk();
+        }
+
+        // NEW: Appends data chunks to screen viewport on-demand 
+        function renderNextBatchChunk() {
+            const timeline = document.getElementById('timeline');
+            
+            // Remove previous bulb if it exists to append it cleanly at the bottom later
+            const oldBulb = timeline.querySelector('.thermometer-base-bulb');
+            if (oldBulb) oldBulb.remove();
+
+            const nextBatchLimit = Math.min(itemsRenderedCount + CHUNK_SIZE, stories.length);
+            
+            for (let i = itemsRenderedCount; i < nextBatchLimit; i++) {
+                const story = stories[i];
                 const itemDiv = document.createElement('div');
-                const sideClass = (index % 2 === 0) ? 'left' : 'right';
+                const sideClass = (i % 2 === 0) ? 'left' : 'right';
                 itemDiv.className = `timeline-item ${sideClass}`;
 
                 let cardInnerMarkup = '';
@@ -845,12 +865,27 @@
 
                 itemDiv.innerHTML = cardInnerMarkup;
                 timeline.appendChild(itemDiv);
-            });
+            }
 
+            itemsRenderedCount = nextBatchLimit;
+
+            // Append base visual mercury bulb at the very end if entries exist
             if (stories.length > 0) {
                 const bulbDiv = document.createElement('div');
                 bulbDiv.className = 'thermometer-base-bulb';
                 timeline.appendChild(bulbDiv);
+            }
+        }
+
+        // NEW: Scroll evaluation boundary watcher loop
+        function handleTimelineScroll() {
+            const box = document.getElementById('scrollBox');
+            
+            // Check if user scrolled within 150px of the bottom boundary line
+            if (box.scrollTop + box.clientHeight >= box.scrollHeight - 150) {
+                if (itemsRenderedCount < stories.length) {
+                    renderNextBatchChunk();
+                }
             }
         }
 
